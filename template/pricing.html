@@ -1,0 +1,157 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAXCARDS | Pricing</title>
+    <link rel="shortcut icon" href="/static/images/favicon.jpg" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'css/pricing.css' %}">
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <a href="/" class="log">MAX<span>CARDS</span></a>
+
+            <div class="toggler" onclick="Drop()">
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+            </div>
+        </div>
+        <div class="act">
+            <a href="{% url 'credit_card' %}">Credit Cards</a>
+            <a href="frontpage.html#about">About Us</a>
+            <a href="frontpage.html#test">Warning</a>
+            <a href="{% url 'orders' %}">Orders</a>
+        </div>
+
+        
+
+        <div class="user">
+            {% if user.is_authenticated %}
+            <img src="{% static 'images/blank.webp' %}" alt="">
+            <a href="{% url 'logout' %}">Log Out</a>
+            {% else %}
+            <a href="{% url 'login' %}">Log In</a>
+            {% endif %}
+
+        </div>
+    </nav>
+
+
+    <section id="mastercard">
+        <h4>Master Card</h4>
+        <div class="cards">
+            
+            {% for card in cards %}
+            {% if card.card_type == "Master" %}
+            <div class="master" style="background: linear-gradient(rgba(0, 0, 0, 0.488), rgba(44, 44, 44, 0.438)), url(static/images/master.jpg);">
+                <div class="cardc">
+                    <small class="head">Card Info</small>
+                    <p>
+                        <small class="tag">Account Holder:</small>
+                         <b>{{card.account_holder}}</b>
+                    </p>
+                    <p>
+                        <small class="tag">Card Number:</small>
+                        {{card.card_number}}*****
+                    </p>
+                    <p>
+                        <small class="tag">Cvv:</small> 
+                        {{card.cvv}}
+                    </p>
+                    <p>
+                        <small class="tag">Price:</small>
+                        GH¢ {{card.price}}
+                    </p>
+                    <p>
+                        <small class="tag">Card Balance:</small> 
+                        ${{card.card_balance}} / {{card.duration}}
+                    </p>
+                    <address>City: {{card.city}}</address>
+                    <address> Country: {{card.country}}</address>
+                </div>
+                
+
+                <a href="{% url 'payment' card.card_id %}">Order</a>
+            </div>
+            {% endif %}
+            {% endfor %}
+                
+        </div>
+    </section>
+
+
+    <section id="visa">
+        <h4>Visa Cards</h4>
+        <div class="cards">
+            {% for card in cards %}
+            
+            {% if card.card_type == "Visa" %}
+                                
+                <div class="master" style="background:linear-gradient(rgba(206, 129, 142, 0.473), rgba(255, 192, 203, 0.379)), url(static/images/4zz.png);">
+                    <div class="cardc">
+                        <small class="head">Card Info</small>
+                        <p>
+                            <small class="tag">Account Holder:</small>
+                             <b>{{card.account_holder}}</b>
+                        </p>
+                        <p>
+                            <small class="tag">Card Number:</small>
+                            {{card.card_number}}*****
+                        </p>
+                        <p>
+                            <small class="tag">Cvv:</small> 
+                            {{card.cvv}}
+                        </p>
+                        <p>
+                            <small class="tag">Price:</small>
+                            GH¢ {{card.price}}
+                        </p>
+                        <p>
+                            <small class="tag">Card Balance:</small> 
+                            ${{card.card_balance}} / {{card.duration}}
+                        </p>
+                        <address>City: {{card.city}}</address>
+                        <address> Country: {{card.country}}</address>
+                    </div>
+                    
+    
+                    <a href="{% url 'payment' card.card_id %}">Order</a>
+                </div>
+            {% endif %}
+            {% endfor %}                
+            
+        </div>
+    </section>
+
+
+    <footer>
+        <div class="foot">
+            <a href="frontpage.html" class="log">MAX<span>CARDS</span></a>
+
+            <div class="act">
+                <a href="#">Top</a>
+                <a href="frontpage.html#about">About Us</a>
+                <a href="frontpage.html#test">Warning</a>
+            </div>
+        <p class="trm"><a class="terms" href="term.html">Terms of Service</a> and <a class="terms" href="term.html">Privacy Policy</a></p>
+        </div><hr>
+
+        <p>MAXCARDS &copy;2023</p>
+    </footer>
+
+
+    <script>
+
+        var frop = document.querySelector("nav")
+
+        function Drop(){
+            frop.classList.toggle("nav_height")
+        }
+
+    </script>
+</body>
+</html>

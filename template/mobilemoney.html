@@ -1,0 +1,133 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAXCARDS | Payment - MoMo
+
+    </title>
+    <link rel="shortcut icon" href="/static/images/favicon.jpg" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'css/trans.css' %}">
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <a href="/" class="log">MAX<span>CARDS</span></a>
+
+            <div class="toggler" onclick="Drop()">
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+            </div>
+        </div>
+        <div class="act">
+            <a href="{% url 'credit_card' %}">Credit Cards</a>
+            <a href="frontpage.html#about">About Us</a>
+            <a href="frontpage.html#test">Warning</a>
+            <a href="{% url 'orders' %}">Orders</a>
+        </div>
+
+        
+
+        <div class="user">
+            {% if user.is_authenticated %}
+            <img src="{% static 'images/blank.webp' %}" alt="">
+            <a href="{% url 'logout' %}">Log Out</a>
+            {% else %}
+            <a href="{% url 'login' %}">Log In</a>
+            {% endif %}
+
+        </div>
+    </nav>
+
+
+    <section>
+        <p class="head">Pay With Mobile Money(MoMo)</p>
+        <p class="caution">
+            Account Holder: {{card.account_holder|capfirst}} <br>
+            Card Number: {{card.card_number}}****<br>
+            CVV: {{card.cvv}} <br>
+            Card balance and Duration: $ {{card.card_balance}} / {{card.duration}} <br>
+            Card Type: {{card.card_type}} <br>
+            Country: {{card.country}} <br>
+            City: {{card.city}} <br>
+        </p>
+
+        <b> Price: GH¢ {{card.price}}</b>
+        </p>
+
+        <form id="form" action="" enctype="multipart/form-data" method="POST">
+            {% csrf_token %}
+            <b>MoMo Payments From All Networks (Ghana Only)</b>
+
+            <p class="header">Steps</p>
+            <p class="follow">
+                * Dial *170* <br> * Select 1 (Transfer Money) <br> * Select 6(Bank Account) <br> * Select 1(Wallet to Bank) <br> * Select 9(EcoBank) Enter account number
+            </p>
+
+            <b class="bod">* ECOBANK (Account Number)  1441003197780</b>
+            <b class="bod">* Account Name:   Fast Pay Inc.</b>
+
+
+            <div class="upload">
+                <p>Click on icon below to upload payment screenshot.</p>
+
+                <div class="screen">
+                    <img src="{% static 'images/upload.png' %}" alt="">
+                    <input type="file" name="post_img" id="screenshDot" accept="image/*">
+                    <small>Upload screenshot here</small>
+                    <p>Send a valid payment reciept else your order won't be approved.</p>
+                    
+                    {% for msg in messages %}
+                        <small>{{msg}}</small>
+                    {% endfor %}
+                        
+                </div>
+            </div>
+            <p class="bod">Click DONE after you have made your payment. You will be notified via email as soon as your payment is verified and approved. Payment verification process takes less than 10 minutes.</p>
+            <small class="notification">Your information is protected by 256-bit SSL encryption</small>
+    
+            <button type="submit" class="btn">DONE</button>
+            <a href="{% url 'payment' card.card_id %}" class="btn">Change Payment Method</a>
+        </form>
+    
+    </section>
+
+
+    <p id="notification"></p>
+
+
+
+
+    <footer>
+        <div class="foot">
+            <a href="frontpage.html" class="log">MAX<span>CARDS</span></a>
+
+            <div class="act">
+                <a href="#">Top</a>
+                <a href="frontpage.html#about">About Us</a>
+                <a href="frontpage.html#test">Warning</a>
+            </div>
+        <p class="trm"><a class="terms" href="term.html">Terms of Service</a> and <a class="terms" href="term.html">Privacy Policy</a></p>
+        </div><hr>
+
+        <p>MAXCARDS &copy;2023</p>
+    </footer>
+
+
+
+     
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

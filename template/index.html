@@ -1,0 +1,52 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAXCARDS | Register</title>
+    <link rel="shortcut icon" href="/static/images/favicon.jpg" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'css/register.css' %}">
+</head>
+<body>
+    <section>
+        <form id="form" action="" method="post" style="background: linear-gradient(to right, #202021c4, #2e48c8aa, #0c1f7e9f), url(/static/images/Card-hero.png);;">
+            {% csrf_token %}
+            <h4>MAXCARDS</h4>
+            <div class="reg">
+                <label for="username">Username</label>
+                <input type="text" name="username" placeholder="Username">
+            </div>
+            <div class="reg">
+                <label for="email">Email</label>
+                <input type="email" name="email" placeholder="Email">
+                <p class="note">Nb: We would like to communicate with you, enter a valid email.</p>
+            </div>
+            <div class="reg">
+                <label for="password">Password</label>
+                <input type="password" name="password" placeholder="Password">
+            </div>
+            <div class="reg">
+                <label for="password2">Confirm Password</label>
+                <input type="password" name="password2" placeholder="Confirm password">
+            </div>
+            
+            
+            {% for msg in messages %}
+                <p>{{msg}}</p>
+            {% endfor %}
+                
+            <div class="cont">
+                <input class="button" type="submit" value="Register">
+            </div>
+           
+            <small>
+                Already have an account?  
+                <a href="{% url 'login' %}">Login</a>
+            </small>
+        </form>
+
+        <p class="trm">By Resgistering, you agree to the <a class="terms" href="term.html">Terms of Service</a> and <a class="terms" href="term.html">Privacy Policy</a>, including Cookie.</p>
+    </section>
+</body>
+</html>

@@ -1,0 +1,101 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAXCARDS | Payment</title>
+    <link rel="shortcut icon" href="/static/images/favicon.jpg" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'css/payment.css' %}">
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <a href="/" class="log">MAX<span>CARDS</span></a>
+
+            <div class="toggler" onclick="Drop()">
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+            </div>
+        </div>
+        <div class="act">
+            <a href="{% url 'credit_card' %}">Credit Cards</a>
+            <a href="frontpage.html#about">About Us</a>
+            <a href="frontpage.html#test">Warning</a>
+            <a href="{% url 'orders' %}">Orders</a>
+        </div>
+        
+
+        <div class="user">
+            {% if user.is_authenticated %}
+            <img src="{% static 'images/blank.webp' %}" alt="">
+            <a href="{% url 'logout' %}">Log Out</a>
+            {% else %}
+            <a href="{% url 'login' %}">Log In</a>
+            {% endif %}
+
+        </div>
+    </nav>
+
+
+    <section>
+        <p class="head">My Orders</p>
+
+        {% if order %}
+            {% for order in order reversed %}
+            <p class="caution">
+                Account Holder: {{order.card.account_holder|capfirst}} <br>
+                Card Number: {{order.card.card_number}}****<br>
+                CVV: {{order.card.cvv}} <br>
+                Card balance and Duration: $ {{order.card.card_balance}} / {{order.card.duration}} <br>
+                Card Type: {{order.card.card_type}} <br>
+                Country: {{order.card.country}} <br>
+                City: {{order.card.city}} <br>
+                Paid with: {{order.transaction_type}}<br>
+                Ordered on: {{order.created_on}}
+            </p>
+
+            <b> Price: GH¢ {{order.card.price}}</b>
+
+            <button value="">{{order.order_status}}</button>
+
+            <a href="{% url 'del_order' order.id %}">Delete Order</a>
+            <a href="{% url 'payment' order.card.card_id %}">ReOrder</a>
+            {% endfor %}
+        {% else %}
+            <p>You Have No Order.</p><a href="{% url 'credit_card' %}">Place an order now!</a>
+        {% endif %}
+    </section>
+
+
+
+
+    <footer>
+        <div class="foot">
+            <a href="frontpage.html" class="log">MAX<span>CARDS</span></a>
+
+            <div class="act">
+                <a href="#">Top</a>
+                <a href="frontpage.html#about">About Us</a>
+                <a href="frontpage.html#test">Warning</a>
+            </div>
+        <p class="trm"><a class="terms" href="term.html">Terms of Service</a> and <a class="terms" href="term.html">Privacy Policy</a></p>
+        </div><hr>
+
+        <p>MAXCARDS &copy;2023</p>
+    </footer>
+
+
+    <script>
+
+        var frop = document.querySelector("nav")
+
+        function Drop(){
+            frop.classList.toggle("nav_height")
+        }
+
+    </script>
+</body>
+</html>

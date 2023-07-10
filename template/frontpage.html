@@ -1,0 +1,129 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAXCARDS</title>
+    <link rel="shortcut icon" href="/static/images/favicon.jpg" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <a href="/" class="log">MAX<span>CARDS</span></a>
+
+            <div class="toggler" onclick="Drop()">
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+            </div>
+        </div>
+        <div class="act">
+            {% if user.is_authenticated %}
+                <a href="{% url 'credit_card' %}">Credit Cards</a>
+                {% else %}
+                <a href="{% url 'login' %}">Credit Cards</a>
+            {% endif %}
+            <div class="act">
+                <a href="frontpage.html#about">About Us</a>
+                <a href="frontpage.html#test">Warning</a>
+                <a href="{% url 'orders' %}">Orders</a>
+            </div>
+        </div>
+
+        
+
+        <div class="user">
+            {% if user.is_authenticated %}
+            <img src="{% static 'images/blank.webp' %}" alt="">
+            <a href="{% url 'logout' %}">Log Out</a>
+            {% else %}
+            <a href="{% url 'login' %}">Log In</a>
+            {% endif %}
+
+        </div>
+    </nav>
+
+
+    <section>
+        <div class="container">
+            <div class="about">
+                {% if user.is_authenticated %}
+                <h4>Hello, {{user.username|capfirst}}!</h4>
+
+                {% else %}
+                <h4>What We Do?</h4>
+                {% endif %}
+
+                <P>We deal in all kinds of online credit cards. We have been in the system for decades. If you are looking for legitimate online credit cards shopping websites, we have been the best since 2018&trade; </P>
+
+                <div class="cc">
+                    {% if user.is_authenticated %}
+                    <small>We are the best Credit cards distributors with over 1,000 customers.</small>
+
+                    <a href="{% url 'credit_card' %}">Check Our Products</a>
+                    {% else %}
+                    <a href="{% url 'login' %}">Check Our Products</a>
+                    {% endif %}
+                </div>
+                
+            </div>
+            <img src="{% static 'images/4zz.png' %}" alt="" class="move">
+        </div>
+    </section>
+
+    <section id="about">
+        <div class="container">
+            <div class="about">
+                <h4>About Us</h4>
+
+                <P>MAXCARDS sells credit cards that has been been validated and activated to be used at any shopping website,
+                    We don't guarantee all websites will accept your card details as mode of payment for purchase of any item .               
+                    We don't guarantee 100% that the card will reach the expiry date stated in the card details before it gets disabled so we recommend you to use the card immediately your order is approved and has been sent to your mail provided in the Registration Page.                    
+                </P>
+            </div>
+            <img src="{% static 'images/credit-cards.webp' %}" alt="">
+        </div>
+    </section>
+
+
+    <section id="test">
+        <div class="container">
+            <div class="about">
+                <h4>Warning</h4>
+                <p>No matter how carefully you plan, every now and then you may have to make an unexpected payment. With a credit card, you are ready for anything. A credit card can also help you to take advantage of bargains and budget for bigger buys. It is always advisable to shop from trusted and well-known retailers like us to ensure the safety of your personal and financial information.</p>
+            </div>
+        </div>
+    </section>
+    
+    <footer>
+        <div class="foot">
+            <a href="frontpage.html" class="log">MAX<span>CARDS</span></a>
+
+            <div class="act">
+                <a href="#">Top</a>
+                <a href="frontpage.html#about">About Us</a>
+                <a href="frontpage.html#test">Warning</a>
+            </div>
+        <p class="trm"><a class="terms" href="term.html">Terms of Service</a> and <a class="terms" href="term.html">Privacy Policy</a></p>
+        </div><hr>
+
+        <p>MAXCARDS &copy;2023</p>
+    </footer>
+
+
+
+    <script>
+
+        var frop = document.querySelector("nav")
+
+        function Drop(){
+            frop.classList.toggle("nav_height")
+        }
+
+    </script>
+</body>
+</html>

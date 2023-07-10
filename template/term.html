@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAXCARDS | Terms & Conditions</title>
+    <link rel="stylesheet" href="terms.css">
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <a href="#" class="log">MAX<span>CARDS</span></a>
+
+            <div class="toggler" onclick="Drop()">
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+            </div>
+        </div>
+        <div class="act">
+            <a href="{% url 'credit_card' %}">Credit Cards</a>
+            <a href="frontpage.html#about">About Us</a>
+            <a href="frontpage.html#test">Warning</a>
+            <a href="{% url 'orders' %}">Orders</a>
+        </div>
+
+        
+
+        <div class="user">
+            <img src="/blank.webp" alt="">
+            <a href="login.html">Log Out</a>
+        </div>
+    </nav>
+
+    <div class="term">
+        <p>TERMS & CONDITIONS AND PRIVACY POLICY</p>
+    </div>
+    <section>
+        <p class="subt">
+            MAXCARDS wishes to establish these policies and agreements with client which uses any of it's outlined services. These services ranges from all categories of order placement. By this we mean that client are bonded to comply with the agreement that will be stated. Clients are therefore adviced to thoroughly read and comprehend all stated policy preferences governing the service. MAXCARDS wishes to engage transparent business by means of this agreement.
+        </p>
+        <article>
+            <header>General</header>
+
+            <p>
+                MAXCARDS terms and privacy policies will are subjected to periodic modification for the sole purpose. You are expected to read all terms of service before placing any order to ensure you are up to date with any changes or any future changes.You will only use the MAXCARDS website in a manner which follows all agreements made with Instagram/Facebook/Twitter/Youtube/Other social media site on their individual Terms of Service page. MAXCARDS rates are subject to change at any time without notice. The payment/refund policy stays in effect in the case of rate changes. MAXCARDS does not guarantee a delivery time for any services. We offer our best estimation for when the order will be delivered. This is only an estimation and MAXCARDS will not refund orders that are processing if you feel they are taking too long. MAXCARDS tries hard to deliver exactly what is expected from us by our re-sellers. In this case, we reserve the right to change a service type if we deem it necessary to complete an order.
+            </p>
+        </article>
+
+
+        <article>
+            <header>Registration</header>
+
+            <p>
+                By registering you confirm that you are 18 years of age or an emancipated minor and are completely able and competent to enter into the terms and conditions set forth in these Terms of Service and comply and abide by them.You may not use fake information while registering your account, including, fake username, fake e-mail, fake phone number or address. Any attempt to spoofing data will result in your account disabled
+            </p>
+        </article>
+
+
+        <article>
+            <header>Service</header>
+
+            <p>
+                MAXCARDS will only sell card details that has been been validated and activated to be used at any shopping website, We DO NOT guarantee all websites will accept your card details as mode of payment for purchase of any item . We DO NOT guarantee 100% the card will reach the expiry date stated in the card details before it gets disabled so we recommend you use card immediately your order is approved and has been sent the card details
+
+            </p>
+        </article>
+    
+
+
+        <article>
+            <header>Privacy Policy</header>
+
+            <p>
+                This policy covers how we use your personal information. We take your privacy seriously and will take all measures to protect your personal information.
+                Any personal information received will only be used to fill your order. We will not sell or redistribute your personal information to anyone. All personal information is encrypted and saved in secure servers.
+            </p>
+        </article>
+    
+    </section>
+
+
+
+
+    <footer>
+        <div class="foot">
+            <a href="frontpage.html" class="log">MAX<span>CARDS</span></a>
+
+            <div class="act">
+                <a href="#">Top</a>
+                <a href="frontpage.html#about">About Us</a>
+                <a href="frontpage.html#test">Warning</a>
+            </div>
+        <p class="trm"><a class="terms" href="term.html">Terms of Service</a> and <a class="terms" href="term.html">Privacy Policy</a></p>
+        </div><hr>
+
+        <p>MAXCARDS &copy;2023</p>
+    </footer>
+    <script>
+        var frop = document.querySelector("nav")
+
+        function Drop(){
+            frop.classList.toggle("nav_height")
+        }
+
+
+        const form = document.getElementById('form');
+    
+        form.addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form submission
+    
+            const paymentMethod = document.getElementById('paymentMethod').value;
+    
+            if (paymentMethod === '') {
+                alert('Please select a payment method to proceed.');
+                return;
+            }
+    
+            // Redirect based on the selected payment method
+            if (paymentMethod === 'bitcoin') {
+                window.location.href = 'bitcoin.html';
+            } else if (paymentMethod === 'mobileMoney') {
+                window.location.href = 'mobilemoney.html';
+            } else if (paymentMethod === 'bankTransfer') {
+                window.location.href = 'banktransfer.html';
+            }
+        });
+    </script>
+</body>
+</html>
