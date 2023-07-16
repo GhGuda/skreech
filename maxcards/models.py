@@ -20,10 +20,7 @@ class Cards(models.Model):
     card_number = models.CharField(max_length=7)
     cvv = models.IntegerField()
     price = models.FloatField()
-    card_balance = models.FloatField()
     duration = models.CharField(max_length=30)
-    city = models.CharField(max_length=200)
-    country = models.CharField(max_length=100)
     card_type = models.CharField(choices=COLORS_CHOICE, max_length=8)
 
 
