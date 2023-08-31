@@ -27,7 +27,11 @@ class Cards(models.Model):
     card_number = models.CharField(max_length=12)
     cvv = models.IntegerField()
     price = models.FloatField()
+<<<<<<< HEAD
     card_limit = models.CharField(max_length=30, null=True)
+=======
+    duration = models.CharField(max_length=30)
+>>>>>>> 9100fb1981374a5ae0fafe6285764df628d30dda
     card_type = models.CharField(choices=COLORS_CHOICE, max_length=8)
     card_dif = models.CharField(choices=CARD_DIF, max_length=12, null=True)
 
