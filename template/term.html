@@ -1,15 +1,17 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MAXCARDS | Terms & Conditions</title>
-    <link rel="stylesheet" href="terms.css">
+    <link rel="shortcut icon" href="{% static 'images/logo.png' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'css/terms.css' %}">
 </head>
 <body>
     <nav>
         <div class="logo">
-            <a href="#" class="log">MAX<span>CARDS</span></a>
+            <a href="/" class="log">MAX<span>CARDS</span></a>
 
             <div class="toggler" onclick="Drop()">
                 <div class="line"></div>
@@ -17,20 +19,35 @@
                 <div class="line"></div>
             </div>
         </div>
-        <div class="act">
-            <a href="{% url 'credit_card' %}">Credit Cards</a>
-            <a href="frontpage.html#about">About Us</a>
-            <a href="frontpage.html#test">Warning</a>
-            <a href="{% url 'orders' %}">Orders</a>
-        </div>
+        {% if user.is_authenticated %}
+            <div class="act">
+                <a href="{% url 'credit_card' %}">Credit Cards</a>
+                <a href="/#about">About Us</a>
+                <a href="/#test">Warning</a>
+                <a href="{% url 'orders' %}">Orders</a>
+            </div>
 
+            <div class="user">
+                <img src="{% static 'images/blank.webp' %}" alt="">
+                <a href="{% url 'logout' %}">Log Out</a>
+            </div>
+        {% else %}
+            <div class="act">
+                <a href="{% url 'login' %}">Credit Cards</a>
+                <a href="/#about">About Us</a>
+                <a href="/#test">Warning</a>
+            </div>
+
+            <div class="user">
+                <a href="{% url 'login' %}">Log In</a>
+                <a href="{% url 'register' %}">Register</a>
+
+            </div>
         
-
-        <div class="user">
-            <img src="/blank.webp" alt="">
-            <a href="login.html">Log Out</a>
-        </div>
+        {% endif %}
+        
     </nav>
+
 
     <div class="term">
         <p>TERMS & CONDITIONS AND PRIVACY POLICY</p>
@@ -65,7 +82,7 @@
 
             </p>
         </article>
-    
+
 
 
         <article>
@@ -76,55 +93,56 @@
                 Any personal information received will only be used to fill your order. We will not sell or redistribute your personal information to anyone. All personal information is encrypted and saved in secure servers.
             </p>
         </article>
-    
+
     </section>
 
 
 
 
-    <footer>
+     <footer>
         <div class="foot">
-            <a href="frontpage.html" class="log">MAX<span>CARDS</span></a>
+            <a href="/" class="log">MAX<span>CARDS</span></a>
 
             <div class="act">
                 <a href="#">Top</a>
-                <a href="frontpage.html#about">About Us</a>
-                <a href="frontpage.html#test">Warning</a>
+                <a href="/#about">About Us</a>
+                <a href="/#test">Warning</a>
             </div>
-        <p class="trm"><a class="terms" href="term.html">Terms of Service</a> and <a class="terms" href="term.html">Privacy Policy</a></p>
+        <p class="trm"><a class="terms" href="{% url 'terms' %}">Terms of Service</a> and <a class="terms" href="{% url 'terms' %}">Privacy Policy</a></p>
         </div><hr>
 
-        <p>MAXCARDS &copy;2023</p>
+        <p>MAXCARDS &copy;{{year}}</p>
     </footer>
+
     <script>
-        var frop = document.querySelector("nav")
+
+        var frop = document.querySelector("nav");
 
         function Drop(){
-            frop.classList.toggle("nav_height")
+            frop.classList.toggle("nav_height");
         }
 
 
-        const form = document.getElementById('form');
-    
-        form.addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent form submission
-    
-            const paymentMethod = document.getElementById('paymentMethod').value;
-    
-            if (paymentMethod === '') {
-                alert('Please select a payment method to proceed.');
-                return;
-            }
-    
-            // Redirect based on the selected payment method
-            if (paymentMethod === 'bitcoin') {
-                window.location.href = 'bitcoin.html';
-            } else if (paymentMethod === 'mobileMoney') {
-                window.location.href = 'mobilemoney.html';
-            } else if (paymentMethod === 'bankTransfer') {
-                window.location.href = 'banktransfer.html';
+        function hideNav() {
+            frop.classList.remove("nav_height");
+        }
+
+        document.addEventListener("click", function(event) {
+            var isNavClicked = frop.contains(event.target);
+            
+            if (!isNavClicked) {
+                hideNav();
             }
         });
+
+        document.addEventListener("touchstart", function(event) {
+            var isNavClicked = frop.contains(event.target);
+            
+            if (!isNavClicked) {
+                hideNav();
+            }
+        });
+
     </script>
 </body>
 </html>

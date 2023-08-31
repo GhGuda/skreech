@@ -1,4 +1,6 @@
 {% load static %}
+{% load censoring_filters %}
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -6,7 +8,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MAXCARDS | Payment</title>
-    <link rel="shortcut icon" href="/static/images/favicon.jpg" type="image/x-icon">
+    <link rel="shortcut icon" href="{% static 'images/logo.png' %}" type="image/x-icon">
     <link rel="stylesheet" href="{% static 'css/payment.css' %}">
 </head>
 <body>
@@ -20,78 +22,172 @@
                 <div class="line"></div>
             </div>
         </div>
-        <div class="act">
-            <a href="{% url 'credit_card' %}">Credit Cards</a>
-            <a href="frontpage.html#about">About Us</a>
-            <a href="frontpage.html#test">Warning</a>
-            <a href="{% url 'orders' %}">Orders</a>
-        </div>
+        {% if user.is_authenticated %}
+            <div class="act">
+                <a href="{% url 'credit_card' %}">Credit Cards</a>
+                <a href="/#about">About Us</a>
+                <a href="/#test">Warning</a>
+                <a href="{% url 'orders' %}">Orders</a>
+            </div>
 
+            <div class="user">
+                <img src="{% static 'images/blank.webp' %}" alt="">
+                <a href="{% url 'logout' %}">Log Out</a>
+            </div>
+        {% else %}
+            <div class="act">
+                <a href="{% url 'login' %}">Credit Cards</a>
+                <a href="/#about">About Us</a>
+                <a href="/#test">Warning</a>
+            </div>
+
+            <div class="user">
+                <a href="{% url 'login' %}">Log In</a>
+                <a href="{% url 'register' %}">Register</a>
+
+            </div>
         
-
-        <div class="user">
-            {% if user.is_authenticated %}
-            <img src="{% static 'images/blank.webp' %}" alt="">
-            <a href="{% url 'logout' %}">Log Out</a>
-            {% else %}
-            <a href="{% url 'login' %}">Log In</a>
-            {% endif %}
-
-        </div>
+        {% endif %}
+        
     </nav>
 
 
     <section>
-        <p class="head">Select Payment Method</p>
-        <p class="caution">
-            Account Holder: {{card.account_holder|capfirst}} <br>
-            Card Number: {{card.card_number}}****<br>
-            CVV: {{card.cvv}} <br>
-            Card balance and Duration: $ {{card.card_balance}} / {{card.duration}} <br>
-            Card Type: {{card.card_type}} <br>
-            Country: {{card.country}} <br>
-            City: {{card.city}} <br>
-        </p>
+        <p class="head">Select Payment Method To Purchase</p>
+        {% if card.card_type == "Master" %}
+        <div class="master">
+            <div class="cc_name">
+                <img class="chip" src="{% static 'images/chip-removebg-preview.png' %}" alt="">
+                <p>{{card.card_dif}}</p>
+            </div>
+            <p class="num">{{card.card_number|censor:4}}</p>
+            <div class="cc_number">
+                <div class="date">
+                    <small class="me">{{card.account_holder}}</small>
+                    <div class="cv">
+                        <div class="validt">
+                            <p>Card Limit</p>
+                            <small>{{card.card_limit}}</small>
+                        </div>
+                        <div class="cvv">
+                            <p>Cvv</p>
+                            <small>{{card.cvv}}</small>
+                        </div>
+                    </div>
+                    <b> Price: GH¢ {{card.price}}</b>
+                </div>
 
-        <b> Price: GH¢ {{card.price}}</b>
+                <img class="masa" src="{% static 'images/master-removebg-preview.png' %}" alt="">
+            </div>
+        </div>
 
+
+        <form id="form" action="">
             <b>Select Payment Method</b>
-            <a href="{% url 'bitcoin' card.card_id %}" class="btn">Bitcoin (Proceed to Pay GH¢{{card.price}})</a>
-            <a href="{% url 'mobilemoney' card.card_id %}" class="btn">MoMo (Proceed to Pay GH¢{{card.price}})</a>
-            <a href="{% url 'banktransfer' card.card_id %}" class="btn">Bank Transfer (Proceed to Pay GH¢{{card.price}})</a>
-                
 
-           
+
+            <a href="{% url 'bitcoin' card.card_id %}" class="btn">Bitcoin (Proceed to Pay GH¢ {{card.price}})</a>
+            <a href="{% url 'mobilemoney' card.card_id %}" class="btn">MoMo (Proceed to Pay GH¢ {{card.price}})</a>
+            <a href="{% url 'banktransfer' card.card_id %}" class="btn"> Momo to Bank (Proceed to Pay GH¢ {{card.price}})</a>
+
+
+
             <a href="{% url 'credit_card' %}" class="btn">Back to Cards Page</a>
-    
+
+
+        </form>
+        {% elif card.card_type == "Visa" %}
+        <div class="visa">
+            <div class="cc_name">
+                <img class="chip" src="{% static 'images/chip-removebg-preview.png' %}" alt="">
+                <p>{{card.card_dif}}</p>
+            </div>
+            <p class="num">{{card.card_number|censor:4}}</p>
+            <div class="cc_number">
+                <div class="date">
+                    <small class="me">{{card.account_holder}}</small>
+                    <div class="cv">
+                        <div class="validt">
+                            <p>Card Limit</p>
+                            <small>{{card.card_limit}}</small>
+                        </div>
+                        <div class="cvv">
+                            <p>Cvv</p>
+                            <small>{{card.cvv}}</small>
+                        </div>
+                    </div>
+                    <b> Price: GH¢ {{card.price}}</b>
+                </div>
+
+                <img class="masa" src="{% static 'images/vis.png' %}" alt="">
+            </div>
+        </div>
+
+
+        <form class="forms" id="form" action="">
+            <b>Select Payment Method</b>
+
+
+            <a href="{% url 'bitcoin' card.card_id %}" class="btn">Bitcoin (Proceed to Pay GH¢ {{card.price}})</a>
+            <a href="{% url 'mobilemoney' card.card_id %}" class="btn">MoMo (Proceed to Pay GH¢ {{card.price}})</a>
+            <a href="{% url 'banktransfer' card.card_id %}" class="btn">Momo to Bank (Proceed to Pay GH¢ {{card.price}})</a>
+
+
+
+            <a href="{% url 'credit_card' %}" class="btn">Back to Cards Page</a>
+
+
+        </form>
+        {% endif %}
+
     </section>
 
 
 
 
-    <footer>
+     <footer>
         <div class="foot">
-            <a href="frontpage.html" class="log">MAX<span>CARDS</span></a>
+            <a href="/" class="log">MAX<span>CARDS</span></a>
 
             <div class="act">
                 <a href="#">Top</a>
-                <a href="frontpage.html#about">About Us</a>
-                <a href="frontpage.html#test">Warning</a>
+                <a href="/#about">About Us</a>
+                <a href="/#test">Warning</a>
             </div>
-        <p class="trm"><a class="terms" href="term.html">Terms of Service</a> and <a class="terms" href="term.html">Privacy Policy</a></p>
+        <p class="trm"><a class="terms" href="{% url 'terms' %}">Terms of Service</a> and <a class="terms" href="{% url 'terms' %}">Privacy Policy</a></p>
         </div><hr>
 
-        <p>MAXCARDS &copy;2023</p>
+        <p>MAXCARDS &copy;{{year}}</p>
     </footer>
-
 
     <script>
 
-        var frop = document.querySelector("nav")
+        var frop = document.querySelector("nav");
 
         function Drop(){
-            frop.classList.toggle("nav_height")
+            frop.classList.toggle("nav_height");
         }
+
+
+        function hideNav() {
+            frop.classList.remove("nav_height");
+        }
+
+        document.addEventListener("click", function(event) {
+            var isNavClicked = frop.contains(event.target);
+            
+            if (!isNavClicked) {
+                hideNav();
+            }
+        });
+
+        document.addEventListener("touchstart", function(event) {
+            var isNavClicked = frop.contains(event.target);
+            
+            if (!isNavClicked) {
+                hideNav();
+            }
+        });
 
     </script>
 </body>

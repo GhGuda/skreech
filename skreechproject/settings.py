@@ -24,14 +24,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-m-mghg8_+%2nav5(e#y9_z($zp9*boh_-^d)37=&_4rz+f^9^@'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-# EMAIL_HOST ='smtp.gmail.com'
-# EMAIL_HOST_USER = "toyboipressure1@gmail.com"
-# EMAIL_HOST_PASSWORD = "ogrssgbzdfmjjlbo"
-# EMAIL_PORT = 587
-# EMAIL_USE_TLS = True
-# EMAL_BACKEND = 'django.core.mail.backends.smtps.Emailbackend'
-ALLOWED_HOSTS = ['*']
+DEBUG = True
+
+ALLOWED_HOSTS = []
 
 
 
@@ -127,11 +122,10 @@ STATIC_URL = 'static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-STATICFILES_DIRS = os.path.join(BASE_DIR, 'static'),
+STATICFILES_DIRS = os.path.join(BASE_DIR / 'statics'),
 
 MEDIA_URL = 'media/'
-
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = BASE_DIR / 'media'
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
@@ -139,15 +133,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 
-
-# EMAIL_ACTIVE_FIELD ='is_active'
-# EMAIL_SERVER = "smtp.gmail.com"
-# EMAIL_ADDRESS = "toyboipressure1@gmail.com"
-# EMAIL_FROM_ADDRESS = "toyboipressure1@gmail.com"
-# EMAIL_PASSWORD = "mecknarh"
-# EMAIL_PORT = 587
-# EMAIL_MAIL_SUBJECT = 'Confirm Your Mail'
-# EMAIL_MAIL_HTML = 'mail.html'
-# EMAIL_MAIL_PLAIN = 'mail.txt'
-# EMAIL_PAGE_TEMPLATE = 'confirm_template.html'
-# EMAIL_PAGE_DOMAIN = 'http://mydomain.com'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_HOST_USER = "maxcard1.com@gmail.com"
+EMAIL_HOST_PASSWORD = "rebbyeygdyqmarws"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True

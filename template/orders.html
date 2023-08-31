@@ -1,13 +1,16 @@
 {% load static %}
+{% load censoring_filters %}
+
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MAXCARDS | Payment</title>
-    <link rel="shortcut icon" href="/static/images/favicon.jpg" type="image/x-icon">
-    <link rel="stylesheet" href="{% static 'css/payment.css' %}">
+    <title>MAXCARDS | Orders</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+    <link rel="shortcut icon" href="{% static 'images/logo.png' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static "css/pricing.css" %}">
 </head>
 <body>
     <nav>
@@ -20,81 +23,134 @@
                 <div class="line"></div>
             </div>
         </div>
-        <div class="act">
-            <a href="{% url 'credit_card' %}">Credit Cards</a>
-            <a href="frontpage.html#about">About Us</a>
-            <a href="frontpage.html#test">Warning</a>
-            <a href="{% url 'orders' %}">Orders</a>
-        </div>
+        {% if user.is_authenticated %}
+            <div class="act">
+                <a href="{% url 'credit_card' %}">Credit Cards</a>
+                <a href="/#about">About Us</a>
+                <a href="/#test">Warning</a>
+                <a href="{% url 'orders' %}">Orders</a>
+            </div>
+
+            <div class="user">
+                <img src="{% static 'images/blank.webp' %}" alt="">
+                <a href="{% url 'logout' %}">Log Out</a>
+            </div>
+        {% else %}
+            <div class="act">
+                <a href="{% url 'login' %}">Credit Cards</a>
+                <a href="/#about">About Us</a>
+                <a href="/#test">Warning</a>
+            </div>
+
+            <div class="user">
+                <a href="{% url 'login' %}">Log In</a>
+                <a href="{% url 'register' %}">Register</a>
+
+            </div>
         
-
-        <div class="user">
-            {% if user.is_authenticated %}
-            <img src="{% static 'images/blank.webp' %}" alt="">
-            <a href="{% url 'logout' %}">Log Out</a>
-            {% else %}
-            <a href="{% url 'login' %}">Log In</a>
-            {% endif %}
-
-        </div>
+        {% endif %}
+        
     </nav>
 
+    <!-- your existing code ... -->
 
-    <section>
-        <p class="head">My Orders</p>
+<section id="mastercard">
+    {% if order %}
+    <h4>My Orders</h4>
+    <div class="cards">
+        {% for order in order reversed %}
+        <div class="card {% if order.card.card_type == 'Master' %}master{% else %}visa{% endif %}">
+            <div class="cc_name">
+                <img class="chip" src="{% static 'images/chip-removebg-preview.png' %}" alt="">
+                <p>{{ order.card.card_dif }}</p>
+            </div>
+            <p class="num">{{ order.card.card_number|censor:4 }}</p>
+            <div class="cc_number">
+                <div class="date">
+                    <small class="me">{{ order.card.account_holder }}</small>
+                    <div class="cv">
+                        <div class="validt">
+                            <p>Card Limit</p>
+                            <small>{{ order.card.card_limit }}</small>
+                        </div>
+                        <div class="cvv">
+                            <p>Cvv</p>
+                            <small>{{ order.card.cvv }}</small>
+                        </div>
+                    </div>
+                </div>
+                <img class="masa" src="{% if order.card.card_type == 'Master' %}{% static 'images/master-removebg-preview.png' %}{% else %}{% static 'images/vis.png' %}{% endif %}" alt="">
+            </div>
+            <a class="status {% if order.order_status == 'Pending' %} {% elif order.order_status == 'Approved' %}approved{% else %}rejected{% endif %}">
+                {{ order.order_status }}
+            </a>
+            <a href="{% url 'payment' order.card.card_id %}" class="order">ReOrder</a>
+            <a href="{% url 'del_order' order.id %}" class="order">Delete Order</a>
+        </div>
+        {% endfor %}
 
-        {% if order %}
-            {% for order in order reversed %}
-            <p class="caution">
-                Account Holder: {{order.card.account_holder|capfirst}} <br>
-                Card Number: {{order.card.card_number}}****<br>
-                CVV: {{order.card.cvv}} <br>
-                Card balance and Duration: $ {{order.card.card_balance}} / {{order.card.duration}} <br>
-                Card Type: {{order.card.card_type}} <br>
-                Country: {{order.card.country}} <br>
-                City: {{order.card.city}} <br>
-                Paid with: {{order.transaction_type}}<br>
-                Ordered on: {{order.created_on}}
-            </p>
-
-            <b> Price: GH¢ {{order.card.price}}</b>
-
-            <button value="">{{order.order_status}}</button>
-
-            <a href="{% url 'del_order' order.id %}">Delete Order</a>
-            <a href="{% url 'payment' order.card.card_id %}">ReOrder</a>
-            {% endfor %}
-        {% else %}
-            <p>You Have No Order.</p><a href="{% url 'credit_card' %}">Place an order now!</a>
+        {% for message in messages %}
+        {% if messages.tags == 'success' %}
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            var m = "{{ message }}";
+            swal('Order Complete!', m, 'success');
+        </script>
         {% endif %}
-    </section>
+        {% endfor %}
+    </div>
+    {% else %}
+    <h4>You have no orders! Place an <a href="{% url 'credit_card' %}" style="color: rgb(12, 31, 126);">Order</a>.</h4>
+    {% endif %}
+</section>
 
-
+<!-- your existing code ... -->
 
 
     <footer>
         <div class="foot">
-            <a href="frontpage.html" class="log">MAX<span>CARDS</span></a>
+            <a href="/" class="log">MAX<span>CARDS</span></a>
 
             <div class="act">
                 <a href="#">Top</a>
-                <a href="frontpage.html#about">About Us</a>
-                <a href="frontpage.html#test">Warning</a>
+                <a href="/#about">About Us</a>
+                <a href="/#test">Warning</a>
             </div>
-        <p class="trm"><a class="terms" href="term.html">Terms of Service</a> and <a class="terms" href="term.html">Privacy Policy</a></p>
+        <p class="trm"><a class="terms" href="{% url 'terms' %}">Terms of Service</a> and <a class="terms" href="{% url 'terms' %}">Privacy Policy</a></p>
         </div><hr>
 
-        <p>MAXCARDS &copy;2023</p>
+        <p>MAXCARDS &copy;{{year}}</p>
     </footer>
 
 
     <script>
 
-        var frop = document.querySelector("nav")
+        var frop = document.querySelector("nav");
 
         function Drop(){
-            frop.classList.toggle("nav_height")
+            frop.classList.toggle("nav_height");
         }
+
+
+        function hideNav() {
+            frop.classList.remove("nav_height");
+        }
+
+        document.addEventListener("click", function(event) {
+            var isNavClicked = frop.contains(event.target);
+            
+            if (!isNavClicked) {
+                hideNav();
+            }
+        });
+
+        document.addEventListener("touchstart", function(event) {
+            var isNavClicked = frop.contains(event.target);
+            
+            if (!isNavClicked) {
+                hideNav();
+            }
+        });
 
     </script>
 </body>

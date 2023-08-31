@@ -1,12 +1,14 @@
-{% load static %}
+{% load static%}
+{% load censoring_filters %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MAXCARDS | Payment - Bitcoin</title>
-    <link rel="shortcut icon" href="/static/images/favicon.jpg" type="image/x-icon">
-    <link rel="stylesheet" href="{% static 'css/trans.css' %}">
+    <title>MAXCARDS | Payment</title>
+    <link rel="shortcut icon" href="{% static 'images/logo.png' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static "css/trans.css" %}">
 </head>
 <body>
     <nav>
@@ -19,114 +21,193 @@
                 <div class="line"></div>
             </div>
         </div>
-        <div class="act">
-            <a href="{% url 'credit_card' %}">Credit Cards</a>
-            <a href="frontpage.html#about">About Us</a>
-            <a href="frontpage.html#test">Warning</a>
-            <a href="{% url 'orders' %}">Orders</a>
-        </div>
+        {% if user.is_authenticated %}
+            <div class="act">
+                <a href="{% url 'credit_card' %}">Credit Cards</a>
+                <a href="/#about">About Us</a>
+                <a href="/#test">Warning</a>
+                <a href="{% url 'orders' %}">Orders</a>
+            </div>
 
+            <div class="user">
+                <img src="{% static 'images/blank.webp' %}" alt="">
+                <a href="{% url 'logout' %}">Log Out</a>
+            </div>
+        {% else %}
+            <div class="act">
+                <a href="{% url 'login' %}">Credit Cards</a>
+                <a href="/#about">About Us</a>
+                <a href="/#test">Warning</a>
+            </div>
+
+            <div class="user">
+                <a href="{% url 'login' %}">Log In</a>
+                <a href="{% url 'register' %}">Register</a>
+
+            </div>
         
-
-        <div class="user">
-            {% if user.is_authenticated %}
-            <img src="{% static '{% static ' %}'images/blank.webp' %}" alt="">
-            <a href="{% url 'logout' %}">Log Out</a>
-            {% else %}
-            <a href="{% url 'login' %}">Log In</a>
-            {% endif %}
-
-        </div>
+        {% endif %}
+        
     </nav>
 
 
+
+
     <section>
-        <p class="head">Pay With Bitcoin(BTC)</p>
-        <p class="caution">
-            Account Holder: {{card.account_holder|capfirst}} <br>
-            Card Number: {{card.card_number}}****<br>
-            CVV: {{card.cvv}} <br>
-            Card balance and Duration: $ {{card.card_balance}} / {{card.duration}} <br>
-            Card Type: {{card.card_type}} <br>
-            Country: {{card.country}} <br>
-            City: {{card.city}} <br>
-        </p>
+        <p class="head">Pay With Bitcoin (World Wide)</p>
+        {% if card.card_type == "Master" %}
+        <div class="master">
+            <div class="cc_name">
+                <img class="chip" src="{% static 'images/chip-removebg-preview.png' %}" alt="">
+                <p>{{card.card_dif}}</p>
+            </div>
+            <p class="num">{{card.card_number|censor:4}}</p>
+            <div class="cc_number">
+                <div class="date">
+                    <small class="me">{{card.account_holder}}</small>
+                    <div class="cv">
+                        <div class="validt">
+                            <p>Card Limit</p>
+                            <small>{{card.card_limit}}</small>
+                        </div>
+                        <div class="cvv">
+                            <p>Cvv</p>
+                            <small>{{card.cvv}}</small>
+                        </div>
+                    </div>
+                    <b> Price: GH¢ {{card.price}}</b>
+                </div>
+
+                <img class="masa" src="{% static 'images/master-removebg-preview.png' %}" alt="">
+            </div>
+        </div>
+
+        {% elif card.card_type == "Visa" %}
+        <div class="visa">
+            <div class="cc_name">
+                <img class="chip" src="{% static 'images/chip-removebg-preview.png' %}" alt="">
+                <p>{{card.card_dif}}</p>
+            </div>
+            <p class="num">{{card.card_number|censor:4}}</p>
+            <div class="cc_number">
+                <div class="date">
+                    <small class="me">{{card.account_holder}}</small>
+                    <div class="cv">
+                        <div class="validt">
+                            <p>Card Limit</p>
+                            <small>{{card.card_limit}}</small>
+                        </div>
+                        <div class="cvv">
+                            <p>Cvv</p>
+                            <small>{{card.cvv}}</small>
+                        </div>
+                    </div>
+                    <b> Price: GH¢ {{card.price}}</b>
+                </div>
+
+                <img class="masa" src="{% static 'images/vis.png' %}" alt="">
+            </div>
+        </div>
+        {% endif %}
 
         <form id="form" action="" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
-            <b>Pay With Bitcoin (World Wide)</b>
-
             <div class="container">
                 <p class="header">Steps</p>
                 <p class="follow">
                     Scan the QR code below with your bitcoin wallet to complete your payment. Click done after you are done with your payment.
                 </p>
 
-                <img class="btc" src="{% static 'images/scan.jpg' %}" alt="">
+
+                <img class="btc" src="{% static "images/scan.jpg" %}" alt="">
 
                 <div class="or">
                     <p>Or</p>
                 </div>
                 <p class="header">
-                    To this address 
+                    To this address
                 </p>
                 <p class="gat">
-                    1Ajmv267apyuL8VXGZMkJFRSugPgmPpdiB
+                    32auVpLNoS7AtziG3fPp6cJauRpNRcGBDx
                 </p>
+
+                <b class="bod">Amount: GH¢ {{card.price}}</b>
 
                 <b class="bod">Nb: Use a correct converter to calculate and convert the amount to bitcoin.</b>
 
 
                 <div class="upload">
                     <p>Click on icon below to upload payment screenshot.</p>
-
-                <div class="screen">
-                    <img src="{% static 'images/upload.png' %}" alt="">
-                    <input type="file" name="post_img" id="screenshot" accept="image/*">
-                    <small>Upload screenshot here</small>
-                    <p>Send a valid payment reciept else your order won't be approved.</p>
+                    <div class="screen">
+                        <div class="upimg">
+                            <img src="{% static "images/upload.png" %}" alt="">
+                            <input type="file" name="post_img" id="screenshot" accept="image/*">
+                        </div>
+                        <small>Upload screenshot here</small>
+                        <p>Send a valid payment reciept else your order won't be approved.</p>
+                        {% for msg in messages %}
+                            <small style="color: red">{{msg}}</small>
+                        {% endfor %}
+                    </div>
                 </div>
-            </div>
             </div>
             <p class="bod">Click DONE after you have made your payment. You will be notified via email as soon as your payment is verified and approved. Payment verification process takes less than 10 minutes.</p>
             <small class="notification">Your information is protected by 256-bit SSL encryption</small>
-    
+
             <button type="submit" class="btn">DONE</button>
             <a href="{% url 'payment' card.card_id %}" class="btn">Change Payment Method</a>
         </form>
-    
+
     </section>
-
-
-    <p id="notification"></p>
-
-
 
 
     <footer>
         <div class="foot">
-            <a href="frontpage.html" class="log">MAX<span>CARDS</span></a>
+            <a href="/" class="log">MAX<span>CARDS</span></a>
 
             <div class="act">
                 <a href="#">Top</a>
-                <a href="frontpage.html#about">About Us</a>
-                <a href="frontpage.html#test">Warning</a>
+                <a href="/#about">About Us</a>
+                <a href="/#test">Warning</a>
             </div>
-        <p class="trm"><a class="terms" href="term.html">Terms of Service</a> and <a class="terms" href="term.html">Privacy Policy</a></p>
+        <p class="trm"><a class="terms" href="{% url 'terms' %}">Terms of Service</a> and <a class="terms" href="{% url 'terms' %}">Privacy Policy</a></p>
         </div><hr>
 
-        <p>MAXCARDS &copy;2023</p>
+        <p>MAXCARDS &copy;{{year}}</p>
     </footer>
+
 
 
 
     <script>
 
-        var frop = document.querySelector("nav")
+        var frop = document.querySelector("nav");
 
         function Drop(){
-            frop.classList.toggle("nav_height")
+            frop.classList.toggle("nav_height");
         }
+
+
+        function hideNav() {
+            frop.classList.remove("nav_height");
+        }
+
+        document.addEventListener("click", function(event) {
+            var isNavClicked = frop.contains(event.target);
+            
+            if (!isNavClicked) {
+                hideNav();
+            }
+        });
+
+        document.addEventListener("touchstart", function(event) {
+            var isNavClicked = frop.contains(event.target);
+            
+            if (!isNavClicked) {
+                hideNav();
+            }
+        });
+
     </script>
 </body>
 </html>

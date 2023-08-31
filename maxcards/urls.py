@@ -1,11 +1,11 @@
-from django.urls import path, include
+from django.urls import path
 from . import views
 
 urlpatterns = [
     path("", views.index, name="index"),
-    path("auth/login", views.login, name="login"),
+    path("login", views.login, name="login"),
     path("logout", views.logout, name="logout"),
-    path("u/register", views.register, name="register"),
+    path("register", views.register, name="register"),
 
 
     path("credit_card", views.credit_card, name="credit_card"),
@@ -16,5 +16,6 @@ urlpatterns = [
     path("del_order/this/yu8304309fwqebq9803u9qhi/<card>/8948yrw8963fjsyiofuiwerunfiasfierwifuoayfu", views.del_order, name="del_order"),
     path("my_orders", views.orders, name="orders"),
 
+    path("must_read/terms/privacy/policy", views.terms, name="terms"),
 
 ]

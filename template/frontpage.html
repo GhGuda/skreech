@@ -1,13 +1,13 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MAXCARDS</title>
-    <link rel="shortcut icon" href="/static/images/favicon.jpg" type="image/x-icon">
+    <link rel="shortcut icon" href="{% static 'images/logo.png' %}" type="image/x-icon">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/dist/css/alertify.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
 </head>
 <body>
@@ -21,32 +21,40 @@
                 <div class="line"></div>
             </div>
         </div>
-        <div class="act">
-            {% if user.is_authenticated %}
-                <a href="{% url 'credit_card' %}">Credit Cards</a>
-                {% else %}
-                <a href="{% url 'login' %}">Credit Cards</a>
-            {% endif %}
+        {% if user.is_authenticated %}
             <div class="act">
-                <a href="frontpage.html#about">About Us</a>
-                <a href="frontpage.html#test">Warning</a>
+                <a href="{% url 'credit_card' %}">Credit Cards</a>
+                <a href="/#about">About Us</a>
+                <a href="/#test">Warning</a>
                 <a href="{% url 'orders' %}">Orders</a>
             </div>
-        </div>
 
+            <div class="user">
+                <img src="{% static 'images/blank.webp' %}" alt="">
+                <a href="{% url 'logout' %}">Log Out</a>
+            </div>
+        {% else %}
+            <div class="act">
+                <a href="{% url 'login' %}">Credit Cards</a>
+                <a href="/#about">About Us</a>
+                <a href="/#test">Warning</a>
+            </div>
+
+            <div class="user">
+                <a href="{% url 'login' %}">Log In</a>
+                <a href="{% url 'register' %}">Register</a>
+
+            </div>
         
-
-        <div class="user">
-            {% if user.is_authenticated %}
-            <img src="{% static 'images/blank.webp' %}" alt="">
-            <a href="{% url 'logout' %}">Log Out</a>
-            {% else %}
-            <a href="{% url 'login' %}">Log In</a>
-            {% endif %}
-
-        </div>
+        {% endif %}
+        
     </nav>
 
+    <script>
+        {% for message in messages %}
+            alertify.success("{{ message|escapejs }}");
+        {% endfor %}
+    </script>
 
     <section>
         <div class="container">
@@ -58,15 +66,17 @@
                 <h4>What We Do?</h4>
                 {% endif %}
 
+
                 <P>We deal in all kinds of online credit cards. We have been in the system for decades. If you are looking for legitimate online credit cards shopping websites, we have been the best since 2018&trade; </P>
 
                 <div class="cc">
-                    {% if user.is_authenticated %}
                     <small>We are the best Credit cards distributors with over 1,000 customers.</small>
 
-                    <a href="{% url 'credit_card' %}">Check Our Products</a>
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'credit_card' %}">Check Our Products</a>
+
                     {% else %}
-                    <a href="{% url 'login' %}">Check Our Products</a>
+                        <a href="{% url 'login' %}">Check Our Products</a>
                     {% endif %}
                 </div>
                 
@@ -101,28 +111,49 @@
     
     <footer>
         <div class="foot">
-            <a href="frontpage.html" class="log">MAX<span>CARDS</span></a>
-
+            <a href="/" class="log">MAX<span>CARDS</span></a>
+            
             <div class="act">
                 <a href="#">Top</a>
-                <a href="frontpage.html#about">About Us</a>
-                <a href="frontpage.html#test">Warning</a>
+                <a href="/#about">About Us</a>
+                <a href="/#test">Warning</a>
             </div>
-        <p class="trm"><a class="terms" href="term.html">Terms of Service</a> and <a class="terms" href="term.html">Privacy Policy</a></p>
+        <p class="trm"><a class="terms" href="{% url 'terms' %}">Terms of Service</a> and <a class="terms" href="{% url 'terms' %}">Privacy Policy</a></p>
         </div><hr>
 
-        <p>MAXCARDS &copy;2023</p>
+        <p>MAXCARDS &copy;{{year}}</p>
     </footer>
 
 
-
+    <script src="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/dist/js/alertify.min.js"></script>
     <script>
 
-        var frop = document.querySelector("nav")
+        var frop = document.querySelector("nav");
 
         function Drop(){
-            frop.classList.toggle("nav_height")
+            frop.classList.toggle("nav_height");
         }
+
+
+        function hideNav() {
+            frop.classList.remove("nav_height");
+        }
+
+        document.addEventListener("click", function(event) {
+            var isNavClicked = frop.contains(event.target);
+            
+            if (!isNavClicked) {
+                hideNav();
+            }
+        });
+
+        document.addEventListener("touchstart", function(event) {
+            var isNavClicked = frop.contains(event.target);
+            
+            if (!isNavClicked) {
+                hideNav();
+            }
+        });
 
     </script>
 </body>

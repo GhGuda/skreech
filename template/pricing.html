@@ -1,4 +1,7 @@
 {% load static %}
+{% load censoring_filters %}
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -6,7 +9,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MAXCARDS | Pricing</title>
-    <link rel="shortcut icon" href="/static/images/favicon.jpg" type="image/x-icon">
+    <link rel="shortcut icon" href="{% static 'images/logo.png' %}" type="image/x-icon">
     <link rel="stylesheet" href="{% static 'css/pricing.css' %}">
 </head>
 <body>
@@ -20,137 +23,157 @@
                 <div class="line"></div>
             </div>
         </div>
-        <div class="act">
-            <a href="{% url 'credit_card' %}">Credit Cards</a>
-            <a href="frontpage.html#about">About Us</a>
-            <a href="frontpage.html#test">Warning</a>
-            <a href="{% url 'orders' %}">Orders</a>
-        </div>
+        {% if user.is_authenticated %}
+            <div class="act">
+                <a href="{% url 'credit_card' %}">Credit Cards</a>
+                <a href="/#about">About Us</a>
+                <a href="/#test">Warning</a>
+                <a href="{% url 'orders' %}">Orders</a>
+            </div>
 
+            <div class="user">
+                <img src="{% static 'images/blank.webp' %}" alt="">
+                <a href="{% url 'logout' %}">Log Out</a>
+            </div>
+        {% else %}
+            <div class="act">
+                <a href="{% url 'login' %}">Credit Cards</a>
+                <a href="/#about">About Us</a>
+                <a href="/#test">Warning</a>
+            </div>
+
+            <div class="user">
+                <a href="{% url 'login' %}">Log In</a>
+                <a href="{% url 'register' %}">Register</a>
+
+            </div>
         
-
-        <div class="user">
-            {% if user.is_authenticated %}
-            <img src="{% static 'images/blank.webp' %}" alt="">
-            <a href="{% url 'logout' %}">Log Out</a>
-            {% else %}
-            <a href="{% url 'login' %}">Log In</a>
-            {% endif %}
-
-        </div>
+        {% endif %}
+        
     </nav>
 
 
-    <section id="mastercard">
-        <h4>Master Card</h4>
-        <div class="cards">
-            
-            {% for card in cards %}
-            {% if card.card_type == "Master" %}
-            <div class="master" style="background: linear-gradient(rgba(0, 0, 0, 0.488), rgba(44, 44, 44, 0.438)), url(static/images/master.jpg);">
-                <div class="cardc">
-                    <small class="head">Card Info</small>
-                    <p>
-                        <small class="tag">Account Holder:</small>
-                         <b>{{card.account_holder}}</b>
-                    </p>
-                    <p>
-                        <small class="tag">Card Number:</small>
-                        {{card.card_number}}*****
-                    </p>
-                    <p>
-                        <small class="tag">Cvv:</small> 
-                        {{card.cvv}}
-                    </p>
-                    <p>
-                        <small class="tag">Price:</small>
-                        GH¢ {{card.price}}
-                    </p>
-                    <p>
-                        <small class="tag">Card Balance:</small> 
-                        ${{card.card_balance}} / {{card.duration}}
-                    </p>
-                    <address>City: {{card.city}}</address>
-                    <address> Country: {{card.country}}</address>
-                </div>
-                
 
-                <a href="{% url 'payment' card.card_id %}">Order</a>
+    <section id="mastercard">
+        <h4>Available Cards</h4>
+        <div class="cards">
+            {% for card in cards reversed %}
+            {% if card.card_type == "Master" %}
+            <div class="master">
+                <div class="cc_name">
+                    <img class="chip" src="{% static 'images/chip-removebg-preview.png' %}" alt="">
+                    <p>{{card.card_dif}}</p>
+                </div>
+                <p class="num">{{card.card_number|censor:4}}</p>
+                <div class="cc_number">
+                    <div class="date">
+                        <small class="me">{{card.account_holder}}</small>
+                        <div class="cv">
+                            <div class="validt">
+                                <p>Card Limit</p>
+                                <small>{{card.card_limit}}</small>
+                            </div>
+                            <div class="cvv">
+                                <p>Cvv</p>
+                                <small>{{card.cvv}}</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <img class="masa" src="{% static 'images/master-removebg-preview.png' %}" alt="">
+                </div>
+                <a href="{% url 'payment' card.card_id %}" class="order">Purchase - GH¢ {{card.price}}</a>
+
             </div>
             {% endif %}
             {% endfor %}
-                
+
+
+            {% for card in cards reversed %}
+            {% if card.card_type == "Visa" %}
+            <div class="visa">
+                <div class="cc_name">
+                    <img class="chip" src="{% static 'images/chip-removebg-preview.png' %}" alt="">
+                    <p>{{card.card_dif}}</p>
+                </div>
+                <p class="num">{{card.card_number|censor:4}}</p>
+                <div class="cc_number">
+                    <div class="date">
+                        <small class="me">{{card.account_holder}}</small>
+                        <div class="cv">
+                            <div class="validt">
+                                <p>Card Limit</p>
+                                <small>{{card.card_limit}}</small>
+                            </div>
+                            <div class="cvv">
+                                <p>Cvv</p>
+                                <small>{{card.cvv}}</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <img class="masa" src="{% static 'images/vis.png' %}" alt="">
+                </div>
+                <a href="{% url 'payment' card.card_id %}" class="order">Purchase - GH¢ {{card.price}}</a>
+            </div>
+            {% endif %}
+            {% endfor %}
         </div>
     </section>
 
 
-    <section id="visa">
+    {% comment %} <section id="visa">
         <h4>Visa Cards</h4>
         <div class="cards">
-            {% for card in cards %}
-            
-            {% if card.card_type == "Visa" %}
-                                
-                <div class="master" style="background:linear-gradient(rgba(206, 129, 142, 0.473), rgba(255, 192, 203, 0.379)), url(static/images/4zz.png);">
-                    <div class="cardc">
-                        <small class="head">Card Info</small>
-                        <p>
-                            <small class="tag">Account Holder:</small>
-                             <b>{{card.account_holder}}</b>
-                        </p>
-                        <p>
-                            <small class="tag">Card Number:</small>
-                            {{card.card_number}}*****
-                        </p>
-                        <p>
-                            <small class="tag">Cvv:</small> 
-                            {{card.cvv}}
-                        </p>
-                        <p>
-                            <small class="tag">Price:</small>
-                            GH¢ {{card.price}}
-                        </p>
-                        <p>
-                            <small class="tag">Card Balance:</small> 
-                            ${{card.card_balance}} / {{card.duration}}
-                        </p>
-                        <address>City: {{card.city}}</address>
-                        <address> Country: {{card.country}}</address>
-                    </div>
-                    
-    
-                    <a href="{% url 'payment' card.card_id %}">Order</a>
-                </div>
-            {% endif %}
-            {% endfor %}                
-            
+
         </div>
-    </section>
+    </section> {% endcomment %}
 
 
     <footer>
         <div class="foot">
-            <a href="frontpage.html" class="log">MAX<span>CARDS</span></a>
+            <a href="/" class="log">MAX<span>CARDS</span></a>
 
             <div class="act">
                 <a href="#">Top</a>
-                <a href="frontpage.html#about">About Us</a>
-                <a href="frontpage.html#test">Warning</a>
+                <a href="/#about">About Us</a>
+                <a href="/#test">Warning</a>
             </div>
-        <p class="trm"><a class="terms" href="term.html">Terms of Service</a> and <a class="terms" href="term.html">Privacy Policy</a></p>
+        <p class="trm"><a class="terms" href="{% url 'terms' %}">Terms of Service</a> and <a class="terms" href="{% url 'terms' %}">Privacy Policy</a></p>
         </div><hr>
 
-        <p>MAXCARDS &copy;2023</p>
+        <p>MAXCARDS &copy;{{year}}</p>
     </footer>
 
 
     <script>
 
-        var frop = document.querySelector("nav")
+        var frop = document.querySelector("nav");
 
         function Drop(){
-            frop.classList.toggle("nav_height")
+            frop.classList.toggle("nav_height");
         }
+
+
+        function hideNav() {
+            frop.classList.remove("nav_height");
+        }
+
+        document.addEventListener("click", function(event) {
+            var isNavClicked = frop.contains(event.target);
+            
+            if (!isNavClicked) {
+                hideNav();
+            }
+        });
+
+        document.addEventListener("touchstart", function(event) {
+            var isNavClicked = frop.contains(event.target);
+            
+            if (!isNavClicked) {
+                hideNav();
+            }
+        });
 
     </script>
 </body>
